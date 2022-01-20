@@ -256,7 +256,7 @@ class _TabuleiroWidgetState extends State<TabuleiroWidget> {
           builder: (_) {
             tabuleiro.peca1.setEscadaTrue(false);
             return AlertDialog(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.greenAccent,
                 title: Text('Você pegou um atalho com a Escada!'));
           });
     }
