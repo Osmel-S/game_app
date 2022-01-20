@@ -5,7 +5,6 @@ import 'package:game_app/model/peca.dart';
 
 class Tabuleiro {
   bool _alternarJogador = false;
-  bool _alternarMensagem = false;
   int vencedor = 0;
   String _mensagem1 = 'Aguarde sua vez!';
   String _mensagem2 = 'Jogue os Dados!';
@@ -37,19 +36,31 @@ class Tabuleiro {
     }
   }
 
+  void te() {
+    if (alternarJogador) {
+      cobrasEscadas.jogar(this, jogador1.id);
+      cobrasEscadas.dadosIguais()
+          ? setAlternarJogador(true)
+          : setAlternarJogador(false);
+      vencedor = jogador1.id;
+    } else {
+      cobrasEscadas.jogar(this, jogador2.id);
+      cobrasEscadas.dadosIguais()
+          ? setAlternarJogador(false)
+          : setAlternarJogador(true);
+      vencedor = jogador2.id;
+    }
+  }
+
   bool get alternarJogador {
     return _alternarJogador;
   }
 
-  bool get alternarMensagem {
-    return _alternarMensagem;
-  }
-
-   String get mensagem1 {
+  String get mensagem1 {
     return _mensagem1;
   }
 
-  String  get mensagem2 {
+  String get mensagem2 {
     return _mensagem2;
   }
 
@@ -66,25 +77,13 @@ class Tabuleiro {
     if (_alternarJogador) {
       _validacao = true;
       _validacao2 = false;
-      print("Alternar jogador: $alternarJogador validacao 1 $validacao e validacao2 $validacao2");
     } else {
       _validacao = false;
       _validacao2 = true;
-      print("Else: Alternar jogador: $alternarJogador validacao 1 $validacao e validacao2 $validacao2");
     }
   }
-
 
   List<Campo> get list {
     return _list;
-  }
-
-  bool mostrarCobrasOuEscadas(){
-    bool cobra = peca1.movimentoCobras();
-    bool escada = peca1.movimentoEscadas();
-    if(cobra || escada){
-      return true;
-    }
-    return false;
   }
 }

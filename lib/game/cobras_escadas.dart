@@ -57,6 +57,7 @@ class CobrasEscadas {
     }
     if (id == 1) {
       tabuleiro.peca1.movimentoEscadas();
+      print(tabuleiro.peca1.movimentoEscadas());
       tabuleiro.peca1.movimentoCobras();
     } else if (id == 2) {
       tabuleiro.peca2.movimentoEscadas();

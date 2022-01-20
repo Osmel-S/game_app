@@ -24,10 +24,10 @@ class _TabuleiroWidgetState extends State<TabuleiroWidget> {
         elevation: 0,
         title: iniciarJogo
             ? Text(
-                "NÚMERO SORTEADO : ${tabuleiro.cobrasEscadas.dado1 + tabuleiro.cobrasEscadas.dado2}",
+                "NÚMEROS SORTEADOS ${tabuleiro.cobrasEscadas.dado1} e ${tabuleiro.cobrasEscadas.dado2} : ${tabuleiro.cobrasEscadas.dado1 + tabuleiro.cobrasEscadas.dado2}",
                 style: TextStyle(
                     color: Color.fromRGBO(255, 127, 55, 5),
-                    fontSize: 25,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold),
               )
             : Text(
@@ -78,8 +78,7 @@ class _TabuleiroWidgetState extends State<TabuleiroWidget> {
           ),
           Stack(children: [
             Container(
-              //color: Colors.grey,
-              height: 400,
+              height: 430,
               padding: const EdgeInsets.all(10),
               child: GridView.count(
                   crossAxisCount: 10,
@@ -148,22 +147,14 @@ class _TabuleiroWidgetState extends State<TabuleiroWidget> {
                       : () {
                           setState(() {
                             iniciarJogo = true;
-
-                            if (tabuleiro.alternarJogador) {
-                              tabuleiro.cobrasEscadas
-                                  .jogar(tabuleiro, tabuleiro.jogador1.id);
-                              tabuleiro.cobrasEscadas.dadosIguais()
-                                  ? tabuleiro.setAlternarJogador(true)
-                                  : tabuleiro.setAlternarJogador(false);
-                              tabuleiro.vencedor = tabuleiro.jogador1.id;
-                            } else {
-                              tabuleiro.cobrasEscadas
-                                  .jogar(tabuleiro, tabuleiro.jogador2.id);
-                              tabuleiro.cobrasEscadas.dadosIguais()
-                                  ? tabuleiro.setAlternarJogador(false)
-                                  : tabuleiro.setAlternarJogador(true);
-                              tabuleiro.vencedor = tabuleiro.jogador2.id;
-                            }
+                            tabuleiro.te();
+                            getAlert(context);
+                            tabuleiro.cobrasEscadas.dadosIguais() ? showDialog(context: context, builder: (_){
+                              return AlertDialog(
+                                title: Text("Dados iguais! Jogue novamente"),
+                                backgroundColor: Colors.greenAccent,
+                              );
+                            }) : Container();
                             if (tabuleiro.cobrasEscadas.vencedor) {
                               showDialog(
                                   context: context,
@@ -195,10 +186,10 @@ class _TabuleiroWidgetState extends State<TabuleiroWidget> {
                         borderRadius: BorderRadius.circular(60))),
                 onPressed: () {
                   setState(() {
-                    tabuleiro.peca1.setLinhaT(0);
-                    tabuleiro.peca1.setColunaT(3);
-                    tabuleiro.peca2.setLinhaT(0);
-                    tabuleiro.peca2.setColunaT(3);
+                    tabuleiro.peca1.setLinhaT(9);
+                    tabuleiro.peca1.setColunaT(0);
+                    tabuleiro.peca2.setLinhaT(9);
+                    tabuleiro.peca2.setColunaT(0);
                     tabuleiro.cobrasEscadas.vencedor = false;
                     iniciarJogo = false;
                   });
@@ -243,6 +234,51 @@ class _TabuleiroWidgetState extends State<TabuleiroWidget> {
           child: Text(index.toString(), style: TextStyle(color: Colors.white)),
         ),
       );
+    }
+
+    return Container();
+  }
+
+  Widget getAlert(BuildContext context) {
+    if (tabuleiro.peca1.casaEspecialCobra) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            tabuleiro.peca1.setCobraTrue(false);
+            return AlertDialog(
+                backgroundColor: Colors.redAccent,
+                title: Text('Você desceu casas com a Cobra!!'));
+          });
+    }
+    if (tabuleiro.peca1.casaEspecialEscada) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            tabuleiro.peca1.setEscadaTrue(false);
+            return AlertDialog(
+                backgroundColor: Colors.green,
+                title: Text('Você pegou um atalho com a Escada!'));
+          });
+    }
+    if (tabuleiro.peca2.casaEspecialCobra) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            tabuleiro.peca2.setCobraTrue(false);
+            return AlertDialog(
+                backgroundColor: Colors.redAccent,
+                title: Text('Você desceu casas com uma Cobra!!'));
+          });
+    }
+    if (tabuleiro.peca2.casaEspecialEscada) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            tabuleiro.peca2.setEscadaTrue(false);
+            return AlertDialog(
+                backgroundColor: Colors.greenAccent,
+                title: Text('Você pegou um atalho com uma Escada!'));
+          });
     }
     return Container();
   }
