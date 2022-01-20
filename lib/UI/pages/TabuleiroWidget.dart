@@ -39,166 +39,168 @@ class _TabuleiroWidgetState extends State<TabuleiroWidget> {
               ),
         centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(height: 5),
-          Row(
-            children: [
-              Expanded(child: Container()),
-              Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        width: 3.0,
-                        color:
-                            tabuleiro.validacao2 ? Colors.green : Colors.red),
-                  ),
-                  child: CircleAvatar(
-                      radius: 35,
-                      child: Image.asset(
-                        'assets/profile_avatar.png',
-                      ))),
-              SizedBox(
-                width: 5,
-              ),
-              Text(
-                "Jogador ${tabuleiro.jogador2.id}: ",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              Text(tabuleiro.validacao
-                  ? tabuleiro.mensagem1
-                  : tabuleiro.mensagem2),
-              Expanded(
-                child: Container(),
-              ),
-            ],
-          ),
-          Stack(children: [
-            Container(
-              height: 430,
-              padding: const EdgeInsets.all(10),
-              child: GridView.count(
-                  crossAxisCount: 10,
-                  children: tabuleiro.list.map((e) {
-                    return GestureDetector(
-                      onTap: () {
-                        print(
-                            "apertou na linha ${e.linha} e colunha ${e.coluna}");
-                      },
-                      child: Stack(children: [
-                        Container(
-                          color: Colors.grey,
-                          child: Image.asset(e.caminhoImg),
-                        ),
-                        getContainer(context, e, Colors.black, 1),
-                        getContainer(context, e, Colors.red, 2),
-                      ]),
-                    );
-                  }).toList()),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Expanded(child: Container()),
+                Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          width: 3.0,
+                          color:
+                              tabuleiro.validacao2 ? Colors.green : Colors.red),
+                    ),
+                    child: CircleAvatar(
+                        radius: 35,
+                        child: Image.asset(
+                          'assets/profile_avatar.png',
+                        ))),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "Jogador ${tabuleiro.jogador2.id}: ",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                Text(tabuleiro.validacao
+                    ? tabuleiro.mensagem1
+                    : tabuleiro.mensagem2),
+                Expanded(
+                  child: Container(),
+                ),
+              ],
             ),
-          ]),
-          Row(
-            children: [
-              Expanded(child: Container()),
+            Stack(children: [
               Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        width: 3.0,
-                        color: tabuleiro.validacao ? Colors.green : Colors.red),
-                  ),
-                  child: CircleAvatar(
-                      radius: 35,
-                      child: Image.asset(
-                        'assets/jpeg1.png',
-                      ))),
-              SizedBox(
-                width: 5,
+                height: 430,
+                padding: const EdgeInsets.all(10),
+                child: GridView.count(
+                    crossAxisCount: 10,
+                    children: tabuleiro.list.map((e) {
+                      return GestureDetector(
+                        onTap: () {
+                          print(
+                              "apertou na linha ${e.linha} e colunha ${e.coluna}");
+                        },
+                        child: Stack(children: [
+                          Container(
+                            color: Colors.grey,
+                            child: Image.asset(e.caminhoImg),
+                          ),
+                          getContainer(context, e, Colors.black, 1),
+                          getContainer(context, e, Colors.red, 2),
+                        ]),
+                      );
+                    }).toList()),
               ),
-              Text(
-                "Jogador ${tabuleiro.jogador1.id}: ",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              Text(tabuleiro.validacao2
-                  ? tabuleiro.mensagem1
-                  : tabuleiro.mensagem2),
-              Expanded(
-                child: Container(),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Column(
-            children: [
-              ElevatedButton(
+            ]),
+            Row(
+              children: [
+                Expanded(child: Container()),
+                Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          width: 3.0,
+                          color: tabuleiro.validacao ? Colors.green : Colors.red),
+                    ),
+                    child: CircleAvatar(
+                        radius: 35,
+                        child: Image.asset(
+                          'assets/jpeg1.png',
+                        ))),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "Jogador ${tabuleiro.jogador1.id}: ",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                Text(tabuleiro.validacao2
+                    ? tabuleiro.mensagem1
+                    : tabuleiro.mensagem2),
+                Expanded(
+                  child: Container(),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Column(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        onSurface: Colors.grey,
+                        minimumSize: Size(50, 50),
+                        primary: Color.fromRGBO(117, 255, 205, 5),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(60))),
+                    onPressed: tabuleiro.cobrasEscadas.vencedor
+                        ? null
+                        : () {
+                            setState(() {
+                              iniciarJogo = true;
+                              tabuleiro.te();
+                              getAlert(context);
+                              tabuleiro.cobrasEscadas.dadosIguais() ? showDialog(context: context, builder: (_){
+                                return AlertDialog(
+                                  title: Text("Dados iguais! Jogue novamente"),
+                                  backgroundColor: Colors.greenAccent,
+                                );
+                              }) : Container();
+                              if (tabuleiro.cobrasEscadas.vencedor) {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        backgroundColor: Colors.redAccent,
+                                        title: Text(
+                                          "JOGADOR ${tabuleiro.vencedor} VENCEU !!!!!!!!!",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      );
+                                    });
+                              }
+                            });
+                          },
+                    child: Text(iniciarJogo ? "JOGAR DADOS" : " INICIAR JOGO ",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15))),
+                SizedBox(height: 10),
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      onSurface: Colors.grey,
+                      onSurface: Colors.redAccent,
                       minimumSize: Size(50, 50),
-                      primary: Color.fromRGBO(117, 255, 205, 5),
+                      //fixedSize: Size(0, 50),
+                      primary: Colors.redAccent,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(60))),
-                  onPressed: tabuleiro.cobrasEscadas.vencedor
-                      ? null
-                      : () {
-                          setState(() {
-                            iniciarJogo = true;
-                            tabuleiro.te();
-                            getAlert(context);
-                            tabuleiro.cobrasEscadas.dadosIguais() ? showDialog(context: context, builder: (_){
-                              return AlertDialog(
-                                title: Text("Dados iguais! Jogue novamente"),
-                                backgroundColor: Colors.greenAccent,
-                              );
-                            }) : Container();
-                            if (tabuleiro.cobrasEscadas.vencedor) {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      backgroundColor: Colors.redAccent,
-                                      title: Text(
-                                        "JOGADOR ${tabuleiro.vencedor} VENCEU !!!!!!!!!",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    );
-                                  });
-                            }
-                          });
-                        },
-                  child: Text(iniciarJogo ? "JOGAR DADOS" : " INICIAR JOGO ",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15))),
-              SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    onSurface: Colors.redAccent,
-                    minimumSize: Size(50, 50),
-                    //fixedSize: Size(0, 50),
-                    primary: Colors.redAccent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(60))),
-                onPressed: () {
-                  setState(() {
-                    tabuleiro.peca1.setLinhaT(9);
-                    tabuleiro.peca1.setColunaT(0);
-                    tabuleiro.peca2.setLinhaT(9);
-                    tabuleiro.peca2.setColunaT(0);
-                    tabuleiro.cobrasEscadas.vencedor = false;
-                    iniciarJogo = false;
-                  });
-                },
-                child: Text("NOVA PARTIDA", style: TextStyle(fontSize: 15)),
-              )
-            ],
-          ),
-        ],
+                  onPressed: () {
+                    setState(() {
+                      tabuleiro.peca1.setLinhaT(9);
+                      tabuleiro.peca1.setColunaT(0);
+                      tabuleiro.peca2.setLinhaT(9);
+                      tabuleiro.peca2.setColunaT(0);
+                      tabuleiro.cobrasEscadas.vencedor = false;
+                      iniciarJogo = false;
+                    });
+                  },
+                  child: Text("NOVA PARTIDA", style: TextStyle(fontSize: 15)),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
